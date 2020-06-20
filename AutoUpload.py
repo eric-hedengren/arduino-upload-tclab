@@ -3,8 +3,8 @@ from serial import Serial
 from subprocess import run
 from time import sleep
 
-arduino = ' - Arduino Leonardo ('
-bootloader = ' - Arduino Leonardo bootloader ('
+arduino = 'Arduino Leonardo ('
+arduino_bootloader = 'Arduino Leonardo bootloader ('
 
 while True:
     print('Loop')
@@ -45,3 +45,10 @@ while True:
     if bootloader in ports:
         boot_com = ports[ports.index(bootloader)]
 
+current_ports = comports()
+upload_ports = [i.device for i in current_ports if arduino_bootloader in i.description]
+for comport in upload_ports: # multi thread
+    run(["C:\\Progra~2\\Arduino\\hardware\\tools\\avr/bin/avrdude", "-CC:\\Progra~2\\Arduino\\hardware\\tools\\avr/etc/avrdude.conf", "-v", "-patmega32u4", "-cavr109", "-P"+comport, "-b57600", "-D", "-Uflash:w:tclab_v2.ino.hex:i"])
+open_ports = [i.device for i in current_ports if arduino in i.description]
+for comport in open_ports:
+    Serial(comport,baudrate=1200).close()
