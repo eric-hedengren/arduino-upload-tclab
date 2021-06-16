@@ -26,7 +26,7 @@ def bootloader_unwanted():
 
 avrdude_program = 'C:\\Progra~2\\Arduino\\hardware\\tools\\avr/bin/avrdude'
 config_location = '-CC:\\Progra~2\\Arduino\\hardware\\tools\\avr/etc/avrdude.conf'
-flash_file = '-Uflash:v:tclab_v2.ino.hex:i'
+flash_file = '-Uflash:w:tclab_v2.ino.hex:i'
 
 upload_command = [avrdude_program,config_location,None,'-patmega32u4','-cavr109','-b57600','-D',flash_file]
 
@@ -40,7 +40,7 @@ print('Ready for a device')
 while True:
     for port in comports():
         if port.description.startswith(device):
-            sleep(.01) # needed? possible error if the com port is accessed too quickly, needs to be initilized? 
+            sleep(.01)
 
             Serial(port.device,baudrate=1200).close()
 
