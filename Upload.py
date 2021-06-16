@@ -1,5 +1,6 @@
 import subprocess
 from time import time
+from time import sleep
 from serial import Serial
 from serial.tools.list_ports import comports
 
@@ -39,12 +40,13 @@ print('Ready for a device')
 while True:
     for port in comports():
         if port.description.startswith(device):
+            sleep(.01)
+
             Serial(port.device,baudrate=1200).close()
 
             upload_port = bootloader_wanted()
 
             if upload_port == None:
-                print('bootloader search timed out')
                 continue
 
             upload_command[2] = port_parameter.format(port=upload_port)
