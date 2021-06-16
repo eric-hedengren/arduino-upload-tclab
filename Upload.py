@@ -1,7 +1,6 @@
 from serial.tools.list_ports import comports
 from serial import Serial
 import subprocess
-import time
 
 
 def bootloader_search():
