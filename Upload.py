@@ -1,12 +1,25 @@
-from serial.tools.list_ports import comports
-from serial import Serial
 import subprocess
+from serial import Serial
+from serial.tools.list_ports import comports
 
 
-def bootloader_search():
-    for port in comports():
-        if port.description.startswith(open_device):
-            return port.device
+def bootloader_search(wanted):
+    if wanted:
+        while True:
+            for port in comports():
+                if port.description.startswith(open_device):
+                    return port.device
+
+    if not wanted:
+        while True:
+            port_list = []
+
+            for port in comports():
+                if port.description.startswith(open_device):
+                    port_list.append(port.description)
+            
+            if port_list == []:
+                break
 
 
 device = 'Arduino Leonardo ('
@@ -26,13 +39,9 @@ while True:
         if port.description.startswith(device): # and the drive is clean
             Serial(port.device,baudrate=1200).close()
 
-            while bootloader_search() == None:
-                continue
-
-            upload_port = bootloader_search()
+            upload_port = bootloader_search(True)
 
             upload_command[5] = port_parameter.format(port=upload_port)
             subprocess.check_output(upload_command,shell=True)
 
-            while bootloader_search() != None:
-                continue
+            bootloader_search(False)
