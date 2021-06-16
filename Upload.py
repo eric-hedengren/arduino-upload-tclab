@@ -3,23 +3,22 @@ from serial import Serial
 from serial.tools.list_ports import comports
 
 
-def bootloader_search(wanted):
-    if wanted:
-        while True:
-            for port in comports():
-                if port.description.startswith(open_device):
-                    return port.device
+def bootloader_wanted():
+    while True:
+        for port in comports():
+            if port.description.startswith(open_device):
+                return port.device
 
-    if not wanted:
-        while True:
-            port_list = []
+def bootloader_unwanted():
+    while True:
+        port_list = []
 
-            for port in comports():
-                if port.description.startswith(open_device):
-                    port_list.append(port.description)
-            
-            if port_list == []:
-                return
+        for port in comports():
+            if port.description.startswith(open_device):
+                port_list.append(port.description)
+        
+        if port_list == []:
+            return
 
 
 avrdude_program = 'C:\\Progra~2\\Arduino\\hardware\\tools\\avr/bin/avrdude'
@@ -39,9 +38,9 @@ while True:
         if port.description.startswith(device):
             Serial(port.device,baudrate=1200).close()
 
-            upload_port = bootloader_search(True)
+            upload_port = bootloader_wanted()
 
             upload_command[2] = port_parameter.format(port=upload_port)
             subprocess.check_output(upload_command,shell=True)
 
-            bootloader_search(False)
+            bootloader_unwanted()
