@@ -29,7 +29,7 @@ avrdude_program = 'C:\\Progra~2\\Arduino\\hardware\\tools\\avr/bin/avrdude'
 config_location = '-CC:\\Progra~2\\Arduino\\hardware\\tools\\avr/etc/avrdude.conf'
 flash_file = '-Uflash:w:tclab_v2.ino.hex:i'
 
-upload_command = [avrdude_program,config_location,'-v','-patmega32u4','-cavr109',None,'-b57600','-D',flash_file]
+upload_command = [avrdude_program,config_location,None,'-patmega32u4','-cavr109','-b57600','-D',flash_file]
 
 port_parameter = '-P{port}'
 
@@ -41,7 +41,7 @@ while True:
 
             upload_port = bootloader_search(True)
 
-            upload_command[5] = port_parameter.format(port=upload_port)
+            upload_command[2] = port_parameter.format(port=upload_port)
             subprocess.check_output(upload_command,shell=True)
 
             bootloader_search(False)
