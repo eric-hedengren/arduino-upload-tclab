@@ -40,7 +40,7 @@ print('Ready for a device')
 while True:
     for port in comports():
         if port.description.startswith(device):
-            sleep(.01)
+            sleep(.01) # needed? possible error if the com port is accessed too quickly, needs to be initilized? 
 
             Serial(port.device,baudrate=1200).close()
 
